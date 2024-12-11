@@ -6,6 +6,8 @@ if [ "$SHOW_GIT" == "0" ]; then
 fi
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "GIT_CURRENT_DIR=$CURRENT_DIR" >> $HOME/tmux-tokyo-night-git-status.log
+
 source "$CURRENT_DIR/../lib/coreutils-compat.sh"
 source "$CURRENT_DIR/themes.sh"
 
@@ -53,8 +55,8 @@ if [[ $UNTRACKED_COUNT -gt 0 ]]; then
   STATUS_UNTRACKED="${RESET}#[fg=${THEME[black]},bg=${THEME[background]},bold] ${UNTRACKED_COUNT} "
 fi
 
-LOCAL_ONLY="$(echo $LOCAL_ONLY)"
-echo "LOCAL_ONLY_PRE_IF=$LOCAL_ONLY" > $HOME/tmux-tokyo-night-git-status.log
+LOCAL_ONLY="$(cat "$CURRENT_DIR/.envrc" | grep 'LOCAL_ONLY' | cut -d"=" -f2)"
+echo "LOCAL_ONLY_PRE_IF=$LOCAL_ONLY" >> $HOME/tmux-tokyo-night-git-status.log
 if [[ "$LOCAL_ONLY" -eq "" ]]; then
   LOCAL_ONLY=$(tmux show-option -gv @glbondiii-tokyo-night-tmux_git_local_only)
 fi
