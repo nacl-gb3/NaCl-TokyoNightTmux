@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-SHOW_NETSPEED=$(tmux show-option -gv @tokyo-night-tmux_show_git)
-if [ "$SHOW_NETSPEED" == "0" ]; then
+SHOW_GIT=$(tmux show-option -gv @tokyo-night-tmux_show_git)
+if [ "$SHOW_GIT" == "0" ]; then
   exit 0
 fi
 
@@ -53,24 +53,32 @@ if [[ $UNTRACKED_COUNT -gt 0 ]]; then
   STATUS_UNTRACKED="${RESET}#[fg=${THEME[black]},bg=${THEME[background]},bold] ${UNTRACKED_COUNT} "
 fi
 
+if [[ "$LOCAL_ONLY" -eq "" ]]; then
+  LOCAL_ONLY=$(tmux show-option -gv @glbondiii-tokyo-night-tmux_git_local_only)
+fi
+
 # Determine repository sync status
 if [[ $SYNC_MODE -eq 0 ]]; then
-  NEED_PUSH=$(git log @{push}.. | wc -l | bc)
-  if [[ $NEED_PUSH -gt 0 ]]; then
-    SYNC_MODE=2
+  if [ "$LOCAL_ONLY" == "1" ]; then
+    SYNC_MODE=4
   else
-    LAST_FETCH=$(stat -c %Y .git/FETCH_HEAD | bc)
-    NOW=$(date +%s | bc)
+    NEED_PUSH=$(git log @{push}.. | wc -l | bc)
+    if [[ $NEED_PUSH -gt 0 ]]; then
+      SYNC_MODE=2
+    else
+      LAST_FETCH=$(stat -c %Y .git/FETCH_HEAD | bc)
+      NOW=$(date +%s | bc)
 
-    # if 5 minutes have passed since the last fetch
-    if [[ $((NOW - LAST_FETCH)) -gt 300 ]]; then
-      git fetch --atomic origin --negotiation-tip=HEAD
-    fi
+      # if 5 minutes have passed since the last fetch
+      if [[ $((NOW - LAST_FETCH)) -gt 300 ]]; then
+        git fetch --atomic origin --negotiation-tip=HEAD
+      fi
 
-    # Check if the remote branch is ahead of the local branch
-    REMOTE_DIFF="$(git diff --numstat "${BRANCH}" "origin/${BRANCH}" 2>/dev/null)"
-    if [[ -n $REMOTE_DIFF ]]; then
-      SYNC_MODE=3
+      # Check if the remote branch is ahead of the local branch
+      REMOTE_DIFF="$(git diff --numstat "${BRANCH}" "origin/${BRANCH}" 2>/dev/null)"
+      if [[ -n $REMOTE_DIFF ]]; then
+        SYNC_MODE=3
+      fi
     fi
   fi
 fi
@@ -85,6 +93,9 @@ case "$SYNC_MODE" in
   ;;
 3)
   REMOTE_STATUS="$RESET#[bg=${THEME[background]},fg=${THEME[magenta]},bold]▒ 󰛀"
+  ;;
+4)
+  REMOTE_STATUS="$RESET#[bg=${THEME[background]},fg=${THEME[bgreen]},bold]▒ 󰛀"
   ;;
 *)
   REMOTE_STATUS="$RESET#[bg=${THEME[background]},fg=${THEME[green]},bold]▒ "
