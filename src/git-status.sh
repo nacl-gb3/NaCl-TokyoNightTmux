@@ -54,13 +54,15 @@ if [[ $UNTRACKED_COUNT -gt 0 ]]; then
 fi
 
 LOCAL_ONLY="$(echo $LOCAL_ONLY)"
+echo "LOCAL_ONLY_PRE_IF=$LOCAL_ONLY" > $HOME/tmux-tokyo-night-git-status.log
 if [[ "$LOCAL_ONLY" -eq "" ]]; then
   LOCAL_ONLY=$(tmux show-option -gv @glbondiii-tokyo-night-tmux_git_local_only)
 fi
+echo "LOCAL_ONLY_POST_IF=$LOCAL_ONLY" >> $HOME/tmux-tokyo-night-git-status.log
 
 # Determine repository sync status
 if [[ $SYNC_MODE -eq 0 ]]; then
-  if [ "$LOCAL_ONLY" == "1" ]; then
+  if [ "$LOCAL_ONLY" -eq "1" ]; then
     SYNC_MODE=4
   else
     NEED_PUSH=$(git log @{push}.. | wc -l | bc)
