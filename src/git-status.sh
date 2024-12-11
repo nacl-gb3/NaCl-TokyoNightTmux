@@ -53,7 +53,7 @@ if [[ $UNTRACKED_COUNT -gt 0 ]]; then
   STATUS_UNTRACKED="${RESET}#[fg=${THEME[black]},bg=${THEME[background]},bold] ${UNTRACKED_COUNT} "
 fi
 
-LOCAL_ONLY=$(echo $LOCAL_ONLY)
+LOCAL_ONLY="$(echo $LOCAL_ONLY)"
 if [[ "$LOCAL_ONLY" -eq "" ]]; then
   LOCAL_ONLY=$(tmux show-option -gv @glbondiii-tokyo-night-tmux_git_local_only)
 fi
