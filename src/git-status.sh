@@ -54,31 +54,29 @@ if [[ $UNTRACKED_COUNT -gt 0 ]]; then
   STATUS_UNTRACKED="${RESET}#[fg=${THEME[black]},bg=${THEME[background]},bold] ${UNTRACKED_COUNT} "
 fi
 
-LOCAL_ONLY=$(tmux show-option -gv @glbondiii-tokyo-night-tmux_git_local_only)
+CHECK_REMOTE=$(tmux show-option -gv @glbondiii-tokyo-night-tmux_git_check_remote)
 
 # Determine repository sync status
 if [[ $SYNC_MODE -eq 0 ]]; then
-  if [ "$LOCAL_ONLY" -eq "1" ]; then
-    SYNC_MODE=4
-  else
-    NEED_PUSH=$(git log @{push}.. | wc -l | bc)
-    if [[ $NEED_PUSH -gt 0 ]]; then
-      SYNC_MODE=2
-    else
-      LAST_FETCH=$(stat -c %Y .git/FETCH_HEAD | bc)
-      NOW=$(date +%s | bc)
+  NEED_PUSH=$(git log @{push}.. | wc -l | bc)
+  if [[ $NEED_PUSH -gt 0 ]]; then
+    SYNC_MODE=2
+  elif [[ "$CHECK_REMOTE" -eq "1" ]]; then
+    LAST_FETCH=$(stat -c %Y .git/FETCH_HEAD | bc)
+    NOW=$(date +%s | bc)
 
-      # if 5 minutes have passed since the last fetch
-      if [[ $((NOW - LAST_FETCH)) -gt 300 ]]; then
-        git fetch --atomic origin --negotiation-tip=HEAD
-      fi
-
-      # Check if the remote branch is ahead of the local branch
-      REMOTE_DIFF="$(git diff --numstat "${BRANCH}" "origin/${BRANCH}" 2>/dev/null)"
-      if [[ -n $REMOTE_DIFF ]]; then
-        SYNC_MODE=3
-      fi
+    # if 5 minutes have passed since the last fetch
+    if [[ $((NOW - LAST_FETCH)) -gt 300 ]]; then
+      git fetch --atomic origin --negotiation-tip=HEAD
     fi
+
+    # Check if the remote branch is ahead of the local branch
+    REMOTE_DIFF="$(git diff --numstat "${BRANCH}" "origin/${BRANCH}" 2>/dev/null)"
+    if [[ -n $REMOTE_DIFF ]]; then
+      SYNC_MODE=3
+    fi
+  else
+    SYNC_MODE=4
   fi
 fi
 
