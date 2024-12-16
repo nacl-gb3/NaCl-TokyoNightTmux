@@ -3,9 +3,9 @@
 ![example workflow](https://github.com/janoamaral/tokyo-night-tmux/actions/workflows/pre-commit.yml/badge.svg?branch=master)
 
 A clean, dark Tmux theme that celebrates the lights of Downtown [Tokyo at night.](https://www.google.com/search?q=tokyo+night&newwindow=1&sxsrf=ACYBGNRiOGCstG_Xohb8CgG5UGwBRpMIQg:1571032079139&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiayIfIhpvlAhUGmuAKHbfRDaIQ_AUIEigB&biw=1280&bih=666&dpr=2)
-The perfect companion for [tokyonight-vim](https://github.com/ghifarit53/tokyonight-vim)
+The perfect companion for ~~[tokyonight-vim](https://github.com/ghifarit53/tokyonight-vim)~~ [tokyonight.nvim](https://github.com/folke/tokyonight.nvim)
 Adapted from the original, [Visual Studio Code theme](https://github.com/enkia/tokyo-night-vscode-theme).
-The old version (deprecated) is still available in the `legacy` branch.
+~~The old version (deprecated) is still available in the `legacy` branch.~~
 
 <a href="https://www.buymeacoffee.com/jano" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
@@ -109,7 +109,22 @@ set -g @tokyo-night-tmux_window_tidy_icons 0
 
 ### Widgets
 
-For widgets add following lines in you `.tmux.conf`
+For widgets add following lines in you `.tmux.conf`  
+Custom settings tagged with glbondiii-tokyo-night-tmux
+
+#### Git/Web Git Widget
+This widget is enabled by default (I think). To disable it:
+ ``` bash
+set -g @tokyo-night-tmux_show_git 0 
+```
+
+Other Settings
+``` bash
+set -g @tokyo-night-tmux_show_wbg 0 # Disables web git widget/script; I also do not know what this is by default
+
+set -g @glbondiii-tokyo-night-tmux_git_check_remote 0 # Disables git fetch from remote repo; use if working more with 
+private repositories; maybe you can also find a way to apply it on a case by case basis; I don't know what this is by default
+```
 
 #### Date and Time widget
 
