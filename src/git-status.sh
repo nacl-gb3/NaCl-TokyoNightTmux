@@ -54,7 +54,7 @@ if [[ $UNTRACKED_COUNT -gt 0 ]]; then
   STATUS_UNTRACKED="${RESET}#[fg=${THEME[black]},bg=${THEME[background]},bold] ${UNTRACKED_COUNT} "
 fi
 
-CHECK_REMOTE=$(tmux show-option -gv @glbondiii-tokyo-night-tmux_git_check_remote)
+CHECK_REMOTE=$(tmux show-option -gv @nacl-tokyo-night-tmux_git_check_remote)
 
 # Determine repository sync status
 if [[ $SYNC_MODE -eq 0 ]]; then

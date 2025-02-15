@@ -110,7 +110,7 @@ set -g @tokyo-night-tmux_window_tidy_icons 0
 ### Widgets
 
 For widgets add following lines in you `.tmux.conf`  
-Custom settings tagged with glbondiii-tokyo-night-tmux
+Custom settings tagged with nacl-tokyo-night-tmux
 
 #### Git/Web Git Widget
 This widget is enabled by default (I think). To disable it:
@@ -122,7 +122,7 @@ Other Settings
 ``` bash
 set -g @tokyo-night-tmux_show_wbg 0 # Disables web git widget/script; I also do not know what this is by default
 
-set -g @glbondiii-tokyo-night-tmux_git_check_remote 0 # Disables git fetch from remote repo; use if working more with 
+set -g @nacl-tokyo-night-tmux_git_check_remote 0 # Disables git fetch from remote repo; use if working more with 
 private repositories; maybe you can also find a way to apply it on a case by case basis; I don't know what this is by default
 ```
 
